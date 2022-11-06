@@ -37,6 +37,7 @@ query GasireUser($gasireUserId: String!) {
     numarTelefon
     nume
     rol {
+      tip
       persoana {
         _id
       }
