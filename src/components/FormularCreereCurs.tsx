@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { Add, Clear } from "@mui/icons-material";
-import { Box, Button, CircularProgress, MenuItem, TextField, ToggleButton, ToggleButtonGroup} from "@mui/material";
+import { Box, Button, CircularProgress, MenuItem, TextField, ToggleButton, ToggleButtonGroup, Typography} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { CREERE_CURS, GASIRE_TOTAL_FACULTATI } from "../utils/apollo/queries";
 import {SustinereCursType} from "../utils/types/backend-data";
@@ -40,11 +40,12 @@ export const FormularCreereCurs: React.FC = () => {
 	const [cursSauLab, setCursSauLab] = useState<string>("");
 	const [fizicHibridSauOnline, setFizicHibridSauOnline] = useState<string>("");
 	const [dateSustinereCurs, setDateSustinereCurs] = useState<SustinereCursType[]>([{numarZi: 1, numarOra: 12}]);
-	const {data, error} = useQuery(GASIRE_TOTAL_FACULTATI, {});
-	const [creereFacultate] = useMutation(CREERE_CURS, {});
+	const {data, error, refetch} = useQuery(GASIRE_TOTAL_FACULTATI, {});
+	const [creeazaCurs] = useMutation(CREERE_CURS, {});
+	const [confirmationMessage, setConfirmationMessage] = useState<string>("");
 
 	const handleSubmit = () => {
-		creereFacultate(
+		creeazaCurs(
 			{variables: {
 				numeCurs: numeCurs,
 				anCurs: anPredare,
@@ -55,7 +56,13 @@ export const FormularCreereCurs: React.FC = () => {
 			}
 			}
 		).then((response)=> {
-			console.log(response);
+			if (response.data.creereCurs) {
+				setConfirmationMessage("Cursul s-a adaugat cu succes!");
+				refetch();
+			}
+			if (response.data === null) {
+				setConfirmationMessage("Nu am putut adauga cursul.");
+			}
 		});
 	};
 
@@ -99,6 +106,7 @@ export const FormularCreereCurs: React.FC = () => {
 					</Box>
 				</Box>
 				<Button variant="contained" onClick={()=> {handleSubmit();}} sx={{mb: "75px"}}>Confirma</Button>
+				{confirmationMessage !== "" && <Typography variant="body1">{confirmationMessage}</Typography>}
 			</Box>);
 	}
 

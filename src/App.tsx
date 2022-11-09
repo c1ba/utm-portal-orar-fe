@@ -7,7 +7,7 @@ import { useUserContext } from "./context/UserContext";
 import { NavigationMenu } from "./components/NavigationMenu";
 import { Box } from "@mui/material";
 import { OrarSaptamana } from "./pages/OrarSaptamana";
-import { FormularCreereCurs } from "./pages/FormularCreereCurs";
+import { FormularCreereCurs } from "./components/FormularCreereCurs";
 import { theme } from "./utils/material-ui-theme";
 import { PanouAdmin } from "./pages/PanouAdmin";
 

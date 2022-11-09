@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const CREERE_CURS = gql`
-mutation Mutation($numeCurs: String!, $anCurs: Int!, $idFacultate: ID!, $tipPrezentareCurs: String!, $tipCurs: String!, $sustineriCurs: [DataSustinereCursInput!]!) {
+mutation CreereCurs($numeCurs: String!, $anCurs: Int!, $idFacultate: ID!, $tipPrezentareCurs: String!, $tipCurs: String!, $sustineriCurs: [DataSustinereCursInput!]!) {
   creereCurs(curs: {nume: $numeCurs, anCurs: $anCurs, facultate: {_id: $idFacultate}, tipPrezentareCurs: $tipPrezentareCurs, tipCurs: $tipCurs, datiSustinereCurs: $sustineriCurs}) {
     anCurs
     datiSustinereCurs {
@@ -12,6 +12,7 @@ mutation Mutation($numeCurs: String!, $anCurs: Int!, $idFacultate: ID!, $tipPrez
     prezente
     tipCurs
     tipPrezentareCurs
+    _id
   }
 }`;
 
@@ -53,8 +54,10 @@ query GasireUser($gasireUserId: String!) {
 }`;
 
 export const GASIRE_CURSURI_DUPA_FACULTATE_ID = gql`
-query Query($gasireFacultateId: String!) {
+query GasireCursuri($gasireFacultateId: String!) {
   gasireFacultate(id: $gasireFacultateId) {
+    _id
+    domeniu
     cursuri {
       _id
       nume
@@ -73,7 +76,46 @@ query Query($gasireFacultateId: String!) {
 export const GASIRE_TOTAL_FACULTATI = gql`
 query GasireTotalFacultati {
   gasireTotalFacultati {
-    domeniu
     _id
+    domeniu
+    cursuri {
+      _id
+      nume
+      tipCurs
+      tipPrezentareCurs
+      datiSustinereCurs {
+        numarOra
+        numarZi
+      }
+      anCurs
+    }
+  }
+}`;
+
+export const CREERE_FACULTATE = gql`
+mutation CreereFacultate($domeniuFacultate: String!) {
+  creereFacultate(facultate: {domeniu: $domeniuFacultate}) {
+    domeniu
+  }
+}`;
+
+export const STERGERE_CURS_DUPA_ID = gql`
+mutation StergereCurs($stergereCursId: String!) {
+  stergereCurs(id: $stergereCursId) {
+    _id
+    nume
+    facultate {
+      cursuri {
+        _id
+        nume
+        datiSustinereCurs {
+          numarOra
+          numarZi
+        }
+        anCurs
+        tipCurs
+        tipPrezentareCurs
+      }
+    }
   }
 }`;
