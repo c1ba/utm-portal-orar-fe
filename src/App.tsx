@@ -7,9 +7,10 @@ import { useUserContext } from "./context/UserContext";
 import { NavigationMenu } from "./components/NavigationMenu";
 import { Box } from "@mui/material";
 import { OrarSaptamana } from "./pages/OrarSaptamana";
-import { FormularCreereCurs } from "./pages/FormularCreereCurs";
+import { FormularCreereCurs } from "./components/FormularCreereCurs";
 import { theme } from "./utils/material-ui-theme";
 import { PanouAdmin } from "./pages/PanouAdmin";
+import { DetaliiCurs } from "./pages/DetaliiCurs";
 
 const PageLayout = () => {
 	return (
@@ -35,6 +36,7 @@ function App() {
 				<Route element={userData?.state.loggedIn ? <OrarSaptamana /> : <Navigate replace={true} to="/"/>} path="orar_saptamana"/>
 				<Route element={userData?.state.loggedIn ? <FormularCreereCurs /> : <Navigate replace={true} to="/"/>} path="creere_curs"/>
 				<Route element={userData?.state.loggedIn ? <PanouAdmin /> : <Navigate replace={true} to="/"/>} path="admin"/>
+				<Route element={userData?.state.loggedIn ? <DetaliiCurs /> : <Navigate replace={true} to="/"/>} path="detalii_curs"/>
 			</Route>
 		</Routes>
 	);

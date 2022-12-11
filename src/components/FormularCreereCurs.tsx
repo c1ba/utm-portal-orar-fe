@@ -1,9 +1,9 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { Add, Clear } from "@mui/icons-material";
-import { Box, Button, CircularProgress, MenuItem, TextField, ToggleButton, ToggleButtonGroup} from "@mui/material";
+import { Box, Button, CircularProgress, MenuItem, TextField, ToggleButton, ToggleButtonGroup, Typography} from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { CREERE_CURS, GASIRE_TOTAL_FACULTATI } from "../utils/apollo/queries";
-import {SustinereCursType} from "../utils/types/backend-data";
+import { CREERE_CURS, GASIRE_TOTAL_FACULTATI, GASIRE_TOTAL_USERI } from "../utils/apollo/queries";
+import {SustinereCursType, UserType} from "../utils/types/backend-data";
 
 interface ComponentaDateSustinereInputProps {
     ziOraCombo: SustinereCursType[];
@@ -40,22 +40,33 @@ export const FormularCreereCurs: React.FC = () => {
 	const [cursSauLab, setCursSauLab] = useState<string>("");
 	const [fizicHibridSauOnline, setFizicHibridSauOnline] = useState<string>("");
 	const [dateSustinereCurs, setDateSustinereCurs] = useState<SustinereCursType[]>([{numarZi: 1, numarOra: 12}]);
-	const {data, error} = useQuery(GASIRE_TOTAL_FACULTATI, {});
-	const [creereFacultate] = useMutation(CREERE_CURS, {});
+	const {data, error, refetch} = useQuery(GASIRE_TOTAL_FACULTATI, {});
+	const [getUseri] = useLazyQuery(GASIRE_TOTAL_USERI, {});
+	const [creeazaCurs] = useMutation(CREERE_CURS, {});
+	const [confirmationMessage, setConfirmationMessage] = useState<string>("");
+	const [listaProfesoriFacultate, setListaProfesoriFacultate] = useState([]);
+	const [profSelectat, setProfSelectat] = useState<string>("");
 
 	const handleSubmit = () => {
-		creereFacultate(
+		creeazaCurs(
 			{variables: {
 				numeCurs: numeCurs,
 				anCurs: anPredare,
 				idFacultate: facultate,
 				tipPrezentareCurs: fizicHibridSauOnline,
 				tipCurs: cursSauLab,
-				sustineriCurs: dateSustinereCurs
+				sustineriCurs: dateSustinereCurs,
+				profesorCursId: profSelectat
 			}
 			}
 		).then((response)=> {
-			console.log(response);
+			if (response.data.creereCurs) {
+				setConfirmationMessage("Cursul s-a adaugat cu succes!");
+				refetch();
+			}
+			if (response.data === null) {
+				setConfirmationMessage("Nu am putut adauga cursul.");
+			}
 		});
 	};
 
@@ -64,6 +75,16 @@ export const FormularCreereCurs: React.FC = () => {
 			setFacultati(data.gasireTotalFacultati);
 		}
 	},[data]);
+
+	useEffect(()=> {
+		if (facultate !== "" && data) {
+			getUseri().then((r)=> {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				const results = r.data.gasireTotiUseri.filter((user: UserType)=> {const domenii = user.rol.facultati.map((fac: any)=> fac.facultate._id); return user.rol.tip === "profesor" && domenii.find((dom: string)=> dom === facultate);});
+				setListaProfesoriFacultate(results);
+			});
+		}
+	},[facultate, data]);
 
 	if (data) {
 		return (
@@ -74,6 +95,9 @@ export const FormularCreereCurs: React.FC = () => {
 						<TextField variant="outlined" label="An Predare" type="number" InputProps={{inputProps: {min: 0}}} value={anPredare} onChange={(e)=> {setAnPredare(parseInt(e.target.value));}} size="small"  sx={{width: "156px", mt: "36px"}} required></TextField>
 						<TextField select value={facultate} label="Facultatea de care apartine" required sx={{width: "285px", mt: "36px"}} onChange={(e)=> {setFacultate(e.target.value);}}>
 							{facultati && facultati.length > 0 && facultati.map((facultate, index)=> <MenuItem key={`fac_${index}`} value={facultate._id}>{facultate.domeniu}</MenuItem>)}
+						</TextField>
+						<TextField select value={profSelectat} label="Profesor Coordonator" required sx={{width: "285px", mt: "36px"}} onChange={(e)=> {setProfSelectat(e.target.value);}}>
+							{listaProfesoriFacultate && listaProfesoriFacultate.length > 0 ? listaProfesoriFacultate.map((profesor: UserType, index: number)=> <MenuItem key={`fac_${index}`} value={profesor._id}>{profesor.nume}</MenuItem>) : <MenuItem value="">Selecteaza o Facultate</MenuItem>}
 						</TextField>
 						<Box sx={{width: "100%", display: "flex", justifyContent: "space-between", mt: "36px"}}>
 							<ToggleButtonGroup color="primary" exclusive value={cursSauLab} onChange={(e, value)=> {setCursSauLab(value);}}>
@@ -99,6 +123,7 @@ export const FormularCreereCurs: React.FC = () => {
 					</Box>
 				</Box>
 				<Button variant="contained" onClick={()=> {handleSubmit();}} sx={{mb: "75px"}}>Confirma</Button>
+				{confirmationMessage !== "" && <Typography variant="body1">{confirmationMessage}</Typography>}
 			</Box>);
 	}
 

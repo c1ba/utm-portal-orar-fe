@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useContext, useState } from "react";
-import { FacultateType, RolFacultate } from "../utils/types/backend-data";
+import { RolFacultate } from "../utils/types/backend-data";
 
 type UserContextProps = {
     children: ReactNode;
@@ -12,6 +12,7 @@ export interface InitialStateType {
     numarTelefon: string;
     rol: string;
     facultati: RolFacultate[];
+	an?: number;
 }
 
 export type UserContextType = {
@@ -20,26 +21,26 @@ export type UserContextType = {
 }
 
 const initialState: InitialStateType = {
-    loggedIn: false,
-    nume: "",
-    mail: "",
-    numarTelefon: "",
-    rol: "",
-    facultati: [],
-}
+	loggedIn: false,
+	nume: "",
+	mail: "",
+	numarTelefon: "",
+	rol: "",
+	facultati: [],
+};
 
 export const UserContext = createContext<UserContextType | null>(null);
 
 export const useUserContext = () => {
-    return useContext(UserContext);
-}
+	return useContext(UserContext);
+};
 
 export const UserContextProvider = ({children}: UserContextProps) => {
-    const [state, setState] = useState<InitialStateType>(initialState);
+	const [state, setState] = useState<InitialStateType>(initialState);
 
-    return(
-        <UserContext.Provider value={{state, setState}}>
-            {children}
-        </UserContext.Provider>
-    )
-}
+	return(
+		<UserContext.Provider value={{state, setState}}>
+			{children}
+		</UserContext.Provider>
+	);
+};

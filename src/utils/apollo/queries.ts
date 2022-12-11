@@ -1,8 +1,32 @@
 import { gql } from "@apollo/client";
 
+export const CREERE_FACULTATE_FARA_CURSURI = gql`
+mutation CreereFacultate($domeniu: String!) {
+  creereFacultate(facultate: {domeniu: $domeniu}) {
+    _id
+  }
+}`;
+
+export const GASIRE_TOTAL_USERI = gql`
+query GasireTotiUseri {
+  gasireTotiUseri {
+    _id
+    nume
+    rol {
+      tip
+      facultati {
+        facultate {
+          _id
+          domeniu
+        }
+      }
+    }
+  }
+}`;
+
 export const CREERE_CURS = gql`
-mutation Mutation($numeCurs: String!, $anCurs: Int!, $idFacultate: ID!, $tipPrezentareCurs: String!, $tipCurs: String!, $sustineriCurs: [DataSustinereCursInput!]!) {
-  creereCurs(curs: {nume: $numeCurs, anCurs: $anCurs, facultate: {_id: $idFacultate}, tipPrezentareCurs: $tipPrezentareCurs, tipCurs: $tipCurs, datiSustinereCurs: $sustineriCurs}) {
+mutation CreereCurs($numeCurs: String!, $anCurs: Int!, $idFacultate: ID!, $tipPrezentareCurs: String!, $tipCurs: String!, $sustineriCurs: [DataSustinereCursInput!]!, $profesorCursId: ID!) {
+  creereCurs(curs: {nume: $numeCurs, anCurs: $anCurs, facultate: {_id: $idFacultate}, tipPrezentareCurs: $tipPrezentareCurs, tipCurs: $tipCurs, datiSustinereCurs: $sustineriCurs, profesorCurs: {_id: $profesorCursId}}) {
     anCurs
     datiSustinereCurs {
       numarOra
@@ -12,6 +36,7 @@ mutation Mutation($numeCurs: String!, $anCurs: Int!, $idFacultate: ID!, $tipPrez
     prezente
     tipCurs
     tipPrezentareCurs
+    _id
   }
 }`;
 
@@ -53,8 +78,10 @@ query GasireUser($gasireUserId: String!) {
 }`;
 
 export const GASIRE_CURSURI_DUPA_FACULTATE_ID = gql`
-query Query($gasireFacultateId: String!) {
+query GasireCursuri($gasireFacultateId: String!) {
   gasireFacultate(id: $gasireFacultateId) {
+    _id
+    domeniu
     cursuri {
       _id
       nume
@@ -66,6 +93,9 @@ query Query($gasireFacultateId: String!) {
       }
       anCurs
       prezente
+      profesorCurs {
+        nume
+      }
     }
   }
 }`;
@@ -73,7 +103,46 @@ query Query($gasireFacultateId: String!) {
 export const GASIRE_TOTAL_FACULTATI = gql`
 query GasireTotalFacultati {
   gasireTotalFacultati {
-    domeniu
     _id
+    domeniu
+    cursuri {
+      _id
+      nume
+      tipCurs
+      tipPrezentareCurs
+      datiSustinereCurs {
+        numarOra
+        numarZi
+      }
+      anCurs
+    }
+  }
+}`;
+
+export const CREERE_FACULTATE = gql`
+mutation CreereFacultate($domeniuFacultate: String!) {
+  creereFacultate(facultate: {domeniu: $domeniuFacultate}) {
+    domeniu
+  }
+}`;
+
+export const STERGERE_CURS_DUPA_ID = gql`
+mutation StergereCurs($stergereCursId: String!) {
+  stergereCurs(id: $stergereCursId) {
+    _id
+    nume
+    facultate {
+      cursuri {
+        _id
+        nume
+        datiSustinereCurs {
+          numarOra
+          numarZi
+        }
+        anCurs
+        tipCurs
+        tipPrezentareCurs
+      }
+    }
   }
 }`;

@@ -1,4 +1,4 @@
-import { Box, Button, Drawer, SwipeableDrawer, Typography } from "@mui/material";
+import { Box, Button, Drawer, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
@@ -6,19 +6,23 @@ import { useUserContext } from "../context/UserContext";
 const rute = [
 	{
 		nume: "Orarul de astazi",
-		ruta: "/home"
+		ruta: "/home",
+		accesPermis: ["student", "profesor", "secretar", "admin"],
 	},
 	{
 		nume: "Orarul pe saptamana asta",
-		ruta: "/orar_saptamana"
+		ruta: "/orar_saptamana",
+		accesPermis: ["student", "profesor", "secretar", "admin"],
 	},
 	{
 		nume: "Creeaza Curs",
-		ruta: "/creere_curs"
+		ruta: "/creere_curs",
+		accesPermis: ["profesor", "secretar"],
 	},
 	{
 		nume: "Panou Admin",
-		ruta: "/admin"
+		ruta: "/admin",
+		accesPermis: ["admin"],
 	}
 ];
 
@@ -26,7 +30,7 @@ export const NavigationMenu: React.FC = () => {
 	const userData = useUserContext();
 	const name = userData?.state.nume !== "" ? `${userData?.state.nume.split(" ")[1].split("-")[0]} ${userData?.state.nume.split(" ")[0]}` : "";
 	const [selectedIndex, setSelectedIndex] = useState<number>(0);
-	const butoaneRute = rute.map((ruta, index)=> {return (
+	const butoaneRute = userData && rute.map((ruta, index)=> {return ruta.accesPermis.includes(userData.state.rol) && (
 		<Button
 			key={`nav_${index}`}
 			sx={{mt: "5px", mb: "5px"}}
