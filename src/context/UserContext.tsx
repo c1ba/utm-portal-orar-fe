@@ -12,6 +12,7 @@ export interface InitialStateType {
     numarTelefon: string;
     rol: string;
     facultati: RolFacultate[];
+	an?: number;
 }
 
 export type UserContextType = {

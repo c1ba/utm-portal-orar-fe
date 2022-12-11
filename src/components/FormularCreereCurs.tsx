@@ -1,9 +1,9 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { Add, Clear } from "@mui/icons-material";
 import { Box, Button, CircularProgress, MenuItem, TextField, ToggleButton, ToggleButtonGroup, Typography} from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { CREERE_CURS, GASIRE_TOTAL_FACULTATI } from "../utils/apollo/queries";
-import {SustinereCursType} from "../utils/types/backend-data";
+import { CREERE_CURS, GASIRE_TOTAL_FACULTATI, GASIRE_TOTAL_USERI } from "../utils/apollo/queries";
+import {FacultateType, SustinereCursType} from "../utils/types/backend-data";
 
 interface ComponentaDateSustinereInputProps {
     ziOraCombo: SustinereCursType[];
@@ -41,8 +41,11 @@ export const FormularCreereCurs: React.FC = () => {
 	const [fizicHibridSauOnline, setFizicHibridSauOnline] = useState<string>("");
 	const [dateSustinereCurs, setDateSustinereCurs] = useState<SustinereCursType[]>([{numarZi: 1, numarOra: 12}]);
 	const {data, error, refetch} = useQuery(GASIRE_TOTAL_FACULTATI, {});
+	const [getUseri] = useLazyQuery(GASIRE_TOTAL_USERI, {});
 	const [creeazaCurs] = useMutation(CREERE_CURS, {});
 	const [confirmationMessage, setConfirmationMessage] = useState<string>("");
+	const [listaProfesoriFacultate, setListaProfesoriFacultate] = useState([]);
+	const [profSelectat, setProfSelectat] = useState<string>("");
 
 	const handleSubmit = () => {
 		creeazaCurs(
@@ -52,7 +55,8 @@ export const FormularCreereCurs: React.FC = () => {
 				idFacultate: facultate,
 				tipPrezentareCurs: fizicHibridSauOnline,
 				tipCurs: cursSauLab,
-				sustineriCurs: dateSustinereCurs
+				sustineriCurs: dateSustinereCurs,
+				profesorCursId: profSelectat
 			}
 			}
 		).then((response)=> {
@@ -72,6 +76,15 @@ export const FormularCreereCurs: React.FC = () => {
 		}
 	},[data]);
 
+	useEffect(()=> {
+		if (facultate !== "" && data) {
+			getUseri().then((r)=> {
+				const results = r.data.gasireTotiUseri.filter((user: any)=> {const domenii = user.rol.facultati.map((fac: any)=> fac.facultate._id); console.log(domenii, facultate); return user.rol.tip === "profesor" && domenii.find((dom: any)=> dom === facultate);});
+				setListaProfesoriFacultate(results);
+			});
+		}
+	},[facultate, data]);
+
 	if (data) {
 		return (
 			<Box sx={{height: "95%", width: "95%", display: "flex", flexDirection: "column", alignItems: "center"}}>
@@ -81,6 +94,9 @@ export const FormularCreereCurs: React.FC = () => {
 						<TextField variant="outlined" label="An Predare" type="number" InputProps={{inputProps: {min: 0}}} value={anPredare} onChange={(e)=> {setAnPredare(parseInt(e.target.value));}} size="small"  sx={{width: "156px", mt: "36px"}} required></TextField>
 						<TextField select value={facultate} label="Facultatea de care apartine" required sx={{width: "285px", mt: "36px"}} onChange={(e)=> {setFacultate(e.target.value);}}>
 							{facultati && facultati.length > 0 && facultati.map((facultate, index)=> <MenuItem key={`fac_${index}`} value={facultate._id}>{facultate.domeniu}</MenuItem>)}
+						</TextField>
+						<TextField select value={profSelectat} label="Profesor Coordonator" required sx={{width: "285px", mt: "36px"}} onChange={(e)=> {setProfSelectat(e.target.value);}}>
+							{listaProfesoriFacultate && listaProfesoriFacultate.length > 0 ? listaProfesoriFacultate.map((profesor: any, index: number)=> <MenuItem key={`fac_${index}`} value={profesor._id}>{profesor.nume}</MenuItem>) : <MenuItem value="">Selecteaza o Facultate</MenuItem>}
 						</TextField>
 						<Box sx={{width: "100%", display: "flex", justifyContent: "space-between", mt: "36px"}}>
 							<ToggleButtonGroup color="primary" exclusive value={cursSauLab} onChange={(e, value)=> {setCursSauLab(value);}}>

@@ -18,8 +18,7 @@ export const HomePage: React.FC = () => {
 		console.log(userData?.state);
 		if (userData?.state.facultati && userData?.state.facultati.length > 0) {
 			getCursuri({variables: {gasireFacultateId: userData.state.facultati[0].facultate._id}}).then((response)=> {
-				console.log(response.data);
-				setCursuri(response.data.gasireFacultate.cursuri);
+				setCursuri(response.data.gasireFacultate.cursuri.filter((curs: CursType)=> userData.state.rol === "student" ? curs.anCurs === userData.state.an : curs));
 			});
 		}
 	},[]);

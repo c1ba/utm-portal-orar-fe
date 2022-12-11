@@ -1,8 +1,32 @@
 import { gql } from "@apollo/client";
 
+export const CREERE_FACULTATE_FARA_CURSURI = gql`
+mutation CreereFacultate($domeniu: String!) {
+  creereFacultate(facultate: {domeniu: $domeniu}) {
+    _id
+  }
+}`;
+
+export const GASIRE_TOTAL_USERI = gql`
+query GasireTotiUseri {
+  gasireTotiUseri {
+    _id
+    nume
+    rol {
+      tip
+      facultati {
+        facultate {
+          _id
+          domeniu
+        }
+      }
+    }
+  }
+}`;
+
 export const CREERE_CURS = gql`
-mutation CreereCurs($numeCurs: String!, $anCurs: Int!, $idFacultate: ID!, $tipPrezentareCurs: String!, $tipCurs: String!, $sustineriCurs: [DataSustinereCursInput!]!) {
-  creereCurs(curs: {nume: $numeCurs, anCurs: $anCurs, facultate: {_id: $idFacultate}, tipPrezentareCurs: $tipPrezentareCurs, tipCurs: $tipCurs, datiSustinereCurs: $sustineriCurs}) {
+mutation CreereCurs($numeCurs: String!, $anCurs: Int!, $idFacultate: ID!, $tipPrezentareCurs: String!, $tipCurs: String!, $sustineriCurs: [DataSustinereCursInput!]!, $profesorCursId: ID!) {
+  creereCurs(curs: {nume: $numeCurs, anCurs: $anCurs, facultate: {_id: $idFacultate}, tipPrezentareCurs: $tipPrezentareCurs, tipCurs: $tipCurs, datiSustinereCurs: $sustineriCurs, profesorCurs: {_id: $profesorCursId}}) {
     anCurs
     datiSustinereCurs {
       numarOra
