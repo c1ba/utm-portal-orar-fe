@@ -66,15 +66,19 @@ export const DetaliiCurs: React.FC = () => {
 						<TextField helperText={absentaError !== "" && absentaError} error={absentaError !== ""} multiline sx={{width: "70%"}} placeholder="Am racit, am treaba la lucru, m-au chemat extraterestrii in misiunea mult asteptata de a explora unviersul, bla bla bla" label="Motiv Absenta" onChange={(e)=> {setMotivAbsenta(e.target.value); e.target.value === "" ? setAbsentaError("Nu poti sa chiulesti fara motiv..") : absentaError !== "" && setAbsentaError("");}} />
 					</Box>
 				</>}
-				{userData && (userData?.rol === "profesor" || userData?.rol === "admin") && <>
-					<Box sx={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", mt: "50px",}}>
+				{userData && (userData?.rol === "profesor" || userData?.rol === "admin" || userData?.rol === "secretar") && <>
+					<Box sx={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", mt: "50px"}}>
 						<ToggleButtonGroup color="primary" exclusive value={listaStudenti} onChange={(e, val) =>{setListaStudenti(val);}}>
 							<ToggleButton value="lista_prezenti">Prezente</ToggleButton>
 							<ToggleButton value="lista_absenti">Absente</ToggleButton>
 						</ToggleButtonGroup>
-						<Box sx={{backgroundColor: `${theme.palette.background.default}`, width: "70%", mb: "25px"}}>
-							{listaStudenti === "lista_prezenti" && state?.studentiPrezenti.map((s: any, index: number)=> <Typography variant="h3" color="primary" key={`s_${index}`}>{s.nume}</Typography>)}
-							{listaStudenti === "lista_absenti" && state?.studentiAbsenti.map((s: any, index: number)=> <Box key={`s_${index}`}><Typography  variant="h3" color="primary">{s.student.nume}</Typography><Typography>{s.motiv}</Typography></Box>)}
+						<Box sx={{backgroundColor: `${theme.palette.background.default}`, width: "70%", mb: "25px", borderRadius: "14px", display: "flex", justifyContent: "center"}}>
+							<Box sx={{mt: "5px", width: "90%"}}>
+								{// eslint-disable-next-line @typescript-eslint/no-explicit-any
+									listaStudenti === "lista_prezenti" && state?.studentiPrezenti.map((s: any, index: number)=> <Typography variant="h3" color="primary" key={`s_${index}`}>{s.nume}</Typography>)}
+								{// eslint-disable-next-line @typescript-eslint/no-explicit-any
+									listaStudenti === "lista_absenti" && state?.studentiAbsenti.map((s: any, index: number)=> <Box key={`s_${index}`}><Typography  variant="h3" color="primary">{s.student.nume}</Typography><Typography>{s.motiv}</Typography></Box>)}
+							</Box>
 						</Box>
 					</Box>
 				</>}
