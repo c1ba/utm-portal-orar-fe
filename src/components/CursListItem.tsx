@@ -12,9 +12,11 @@ export interface CursListItemProps {
     tipPrezentareCurs: string;
     dataSustinereCurs: {numarOra: number; numarZi: number;};
 	profesorCurs: UserType;
+	prezenteStudenti: UserType[];
+	absenteStudenti: UserType[];
 }
 
-export const CursListItem: React.FC<CursListItemProps> = ({id, nume, anCurs, dataSustinereCurs, profesorCurs, tipPrezentareCurs, tipCurs}) => {
+export const CursListItem: React.FC<CursListItemProps> = ({id, nume, anCurs, dataSustinereCurs, profesorCurs, tipPrezentareCurs, tipCurs, prezenteStudenti, absenteStudenti}) => {
 	const navigate = useNavigate();
 	return (
 		<Box sx={{display: "flex", width: "95%", height: "96px", alignItems: "center", justifyContent: "space-between", borderBottom: "solid #D9D9D9 1px"}}>
@@ -28,7 +30,7 @@ export const CursListItem: React.FC<CursListItemProps> = ({id, nume, anCurs, dat
 						backgroundColor: `${theme.palette.primary.main}`,
 						color: `${theme.palette.secondary.light}`
 					}}}
-				onClick={()=> {console.log("Wa Hoo!"); navigate("../detalii_curs", {state: {_id: id, numeCurs: nume, anCurs: anCurs, dataSustinereCurs: dataSustinereCurs, profesorCurs: profesorCurs, tipPrezentareCurs: tipPrezentareCurs, tipCurs: tipCurs}});}}
+				onClick={()=> {console.log("Wa Hoo!"); navigate("../detalii_curs", {state: {_id: id, numeCurs: nume, anCurs: anCurs, dataSustinereCurs: dataSustinereCurs, profesorCurs: profesorCurs, tipPrezentareCurs: tipPrezentareCurs, tipCurs: tipCurs, studentiPrezenti: prezenteStudenti, studentiAbsenti: absenteStudenti}});}}
 			>Mai multe detalii&gt;&gt;
 			</Button>
 		</Box>

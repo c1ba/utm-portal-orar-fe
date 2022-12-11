@@ -17,6 +17,7 @@ export const LoginPage: React.FC = () => {
 			if(response.data) {
 				const newState = userData?.state;
 				if (newState) {
+					newState._id = response.data.gasireUser._id;
 					newState.nume = response.data.gasireUser.nume;
 					newState.mail = response.data.gasireUser.eMail;
 					newState.numarTelefon = response.data.gasireUser.numartelefon;

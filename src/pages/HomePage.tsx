@@ -31,7 +31,7 @@ export const HomePage: React.FC = () => {
 					{cursuri.map((curs, index)=> { 
 						const today = new Date(), foundTodaysCourse = curs.datiSustinereCurs.find((data)=> data.numarZi === today.getDay());
 						if (foundTodaysCourse) {
-							return <CursListItem key={`curs_${index}`} id={curs._id} nume={curs.nume} profesorCurs={curs.profesorCurs} anCurs={curs.anCurs} tipCurs={curs.tipCurs} tipPrezentareCurs={curs.tipPrezentareCurs} dataSustinereCurs={foundTodaysCourse}/>;
+							return <CursListItem key={`curs_${index}`} id={curs._id} nume={curs.nume} profesorCurs={curs.profesorCurs} anCurs={curs.anCurs} tipCurs={curs.tipCurs} tipPrezentareCurs={curs.tipPrezentareCurs} dataSustinereCurs={foundTodaysCourse} prezenteStudenti={curs.studentiPrezenti} absenteStudenti={curs.studentiAbsenti}/>;
 						}
 					}
 					)}
