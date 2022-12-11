@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { theme } from "../utils/material-ui-theme";
 import { UserType } from "../utils/types/backend-data";
 
-interface CursListItemProps {
+export interface CursListItemProps {
     id: string;
     nume: string;
     anCurs: number;
