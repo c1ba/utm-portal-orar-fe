@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { theme } from "../utils/material-ui-theme";
 import { UserType } from "../utils/types/backend-data";
 
@@ -17,6 +17,7 @@ export interface CursListItemProps {
 }
 
 export const CursListItem: React.FC<CursListItemProps> = ({id, nume, anCurs, dataSustinereCurs, profesorCurs, tipPrezentareCurs, tipCurs, prezenteStudenti, absenteStudenti}) => {
+	const location = useLocation();
 	const navigate = useNavigate();
 	return (
 		<Box sx={{display: "flex", width: "95%", height: "96px", alignItems: "center", justifyContent: "space-between", borderBottom: "solid #D9D9D9 1px"}}>
@@ -30,7 +31,7 @@ export const CursListItem: React.FC<CursListItemProps> = ({id, nume, anCurs, dat
 						backgroundColor: `${theme.palette.primary.main}`,
 						color: `${theme.palette.secondary.light}`
 					}}}
-				onClick={()=> {console.log("Wa Hoo!"); navigate("../detalii_curs", {state: {_id: id, numeCurs: nume, anCurs: anCurs, dataSustinereCurs: dataSustinereCurs, profesorCurs: profesorCurs, tipPrezentareCurs: tipPrezentareCurs, tipCurs: tipCurs, studentiPrezenti: prezenteStudenti, studentiAbsenti: absenteStudenti}});}}
+				onClick={()=> {console.log("Wa Hoo!"); navigate("../detalii_curs", {state: {_id: id, numeCurs: nume, anCurs: anCurs, dataSustinereCurs: dataSustinereCurs, profesorCurs: profesorCurs, tipPrezentareCurs: tipPrezentareCurs, tipCurs: tipCurs, studentiPrezenti: prezenteStudenti, studentiAbsenti: absenteStudenti, lastLocation: location.pathname}});}}
 			>Mai multe detalii&gt;&gt;
 			</Button>
 		</Box>

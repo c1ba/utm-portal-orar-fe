@@ -35,7 +35,7 @@ function App() {
 				<Route element={userData?.state.loggedIn ? <HomePage /> : <Navigate replace={true} to="/"/>} path="home"/>
 				<Route element={userData?.state.loggedIn ? <OrarSaptamana /> : <Navigate replace={true} to="/"/>} path="orar_saptamana"/>
 				<Route element={userData?.state.loggedIn ? <FormularCreereCurs /> : <Navigate replace={true} to="/"/>} path="creere_curs"/>
-				<Route element={userData?.state.loggedIn ? <PanouAdmin /> : <Navigate replace={true} to="/"/>} path="admin"/>
+				<Route element={userData?.state.loggedIn && (userData?.state.rol === "secretar" || userData?.state.rol === "admin") ? <PanouAdmin /> : <Navigate replace={true} to="/"/>} path="admin"/>
 				<Route element={userData?.state.loggedIn ? <DetaliiCurs /> : <Navigate replace={true} to="/"/>} path="detalii_curs"/>
 			</Route>
 		</Routes>
