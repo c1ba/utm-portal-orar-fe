@@ -32,6 +32,9 @@ export const LoginPage: React.FC = () => {
 						facultati: newState.facultati, 
 						loggedIn: newState.loggedIn
 					});
+					if (!document.cookie) {
+						document.cookie = `uid=${logId}; expires=${new Date().setHours(new Date().getHours() + 1)}`;
+					}
 					navigate("/home");
 				}
 			}
@@ -43,8 +46,13 @@ export const LoginPage: React.FC = () => {
 
 
 	useEffect(()=> {
-		console.log(logId);
-	},[logId]);
+		const cookie = document.cookie;
+		if (cookie) {
+			const id = cookie.split("=")[1];
+			setLogId(id);
+			handleSubmit();
+		}
+	},[]);
 
 
 	return (<Box sx={{width: "100vw", height: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
