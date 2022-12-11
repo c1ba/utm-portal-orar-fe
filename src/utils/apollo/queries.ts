@@ -33,7 +33,6 @@ mutation CreereCurs($numeCurs: String!, $anCurs: Int!, $idFacultate: ID!, $tipPr
       numarZi
     }
     nume
-    prezente
     tipCurs
     tipPrezentareCurs
     _id
@@ -77,6 +76,29 @@ query GasireUser($gasireUserId: String!) {
   }
 }`;
 
+export const EDITARE_PREZENTE_CURS = gql`
+mutation EditareCursPrezente($editareCursId: String!, $studentiPrezentiIds: [UserWhereInput!]) {
+  editareCurs(id: $editareCursId, inputEditareCurs: {studentiPrezenti: $studentiPrezentiIds}) {
+    _id
+    studentiPrezenti {
+      _id
+      nume
+    }
+  }
+}`;
+
+export const EDITARE_ABSENTE_CURSURI = gql`
+mutation Mutation($editareCursId: String!, $studentiAbsentiData: [StudentAbsentInput!]) {
+  editareCurs(id: $editareCursId, inputEditareCurs: {studentiAbsenti: $studentiAbsentiData}) {
+    studentiAbsenti {
+      student {
+        nume
+      }
+      motiv
+    }
+  }
+}`;
+
 export const GASIRE_CURSURI_DUPA_FACULTATE_ID = gql`
 query GasireCursuri($gasireFacultateId: String!) {
   gasireFacultate(id: $gasireFacultateId) {
@@ -92,9 +114,19 @@ query GasireCursuri($gasireFacultateId: String!) {
         numarZi
       }
       anCurs
-      prezente
       profesorCurs {
         nume
+      }
+      studentiPrezenti {
+        _id
+        nume
+      }
+      studentiAbsenti {
+        student {
+          _id
+        nume
+        }
+        motiv
       }
     }
   }

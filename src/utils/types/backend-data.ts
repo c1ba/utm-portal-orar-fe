@@ -9,9 +9,10 @@ export interface CursType {
     anCurs: number;
     tipPrezentareCurs: string;
     tipCurs: string;
-    prezente: string[];
     datiSustinereCurs: SustinereCursType[];
     profesorCurs: UserType;
+    studentiPrezenti: UserType[];
+    studentiAbsenti: UserType[];
 }
 
 export interface RolFacultate {

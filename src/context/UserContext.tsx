@@ -6,6 +6,7 @@ type UserContextProps = {
 }
 
 export interface InitialStateType {
+	_id: string;
     loggedIn: boolean;
     nume: string;
     mail: string;
@@ -21,6 +22,7 @@ export type UserContextType = {
 }
 
 const initialState: InitialStateType = {
+	_id: "",
 	loggedIn: false,
 	nume: "",
 	mail: "",
