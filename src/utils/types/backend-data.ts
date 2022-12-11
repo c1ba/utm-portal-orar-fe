@@ -11,6 +11,7 @@ export interface CursType {
     tipCurs: string;
     prezente: string[];
     datiSustinereCurs: SustinereCursType[];
+    profesorCurs: UserType;
 }
 
 export interface RolFacultate {
@@ -22,4 +23,19 @@ export interface FacultateType {
     _id: string;
     domeniu: string;
     cursuri: CursType[];
+}
+
+export interface RolType {
+    _id: string;
+    tip: string;
+    an?: number;
+    facultati: [{facultate: FacultateType}];
+}
+
+export interface UserType {
+    _id: string;
+    nume: string;
+    numarTelefon: string;
+    eMail: string;
+    rol: RolType;
 }

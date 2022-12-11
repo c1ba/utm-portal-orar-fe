@@ -29,9 +29,9 @@ export const HomePage: React.FC = () => {
 			<Box sx={{width: "100%", height: "828px", backgroundColor: `${theme.palette.secondary.light}`, borderRadius: "20px", display: "flex", justifyContent: "center"}}>
 				<Box sx={{height: "95%", width: "95%"}}>
 					{cursuri.map((curs, index)=> { 
-						const today = new Date(), foundTodaysCourse = curs.datiSustinereCurs.find((data)=> data.numarZi === today.getDay()); 
+						const today = new Date(), foundTodaysCourse = curs.datiSustinereCurs.find((data)=> data.numarZi === today.getDay());
 						if (foundTodaysCourse) {
-							return <CursListItem key={`curs_${index}`} id={curs._id} nume={curs.nume} anCurs={curs.anCurs} tipCurs={curs.tipCurs} tipPrezentareCurs={curs.tipPrezentareCurs} dataSustinereCurs={foundTodaysCourse}/>;
+							return <CursListItem key={`curs_${index}`} id={curs._id} nume={curs.nume} profesorCurs={curs.profesorCurs} anCurs={curs.anCurs} tipCurs={curs.tipCurs} tipPrezentareCurs={curs.tipPrezentareCurs} dataSustinereCurs={foundTodaysCourse}/>;
 						}
 					}
 					)}

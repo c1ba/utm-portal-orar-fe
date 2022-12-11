@@ -93,6 +93,9 @@ query GasireCursuri($gasireFacultateId: String!) {
       }
       anCurs
       prezente
+      profesorCurs {
+        nume
+      }
     }
   }
 }`;

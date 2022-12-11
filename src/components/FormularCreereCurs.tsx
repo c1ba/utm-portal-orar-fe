@@ -3,7 +3,7 @@ import { Add, Clear } from "@mui/icons-material";
 import { Box, Button, CircularProgress, MenuItem, TextField, ToggleButton, ToggleButtonGroup, Typography} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { CREERE_CURS, GASIRE_TOTAL_FACULTATI, GASIRE_TOTAL_USERI } from "../utils/apollo/queries";
-import {FacultateType, SustinereCursType} from "../utils/types/backend-data";
+import {SustinereCursType, UserType} from "../utils/types/backend-data";
 
 interface ComponentaDateSustinereInputProps {
     ziOraCombo: SustinereCursType[];
@@ -79,7 +79,8 @@ export const FormularCreereCurs: React.FC = () => {
 	useEffect(()=> {
 		if (facultate !== "" && data) {
 			getUseri().then((r)=> {
-				const results = r.data.gasireTotiUseri.filter((user: any)=> {const domenii = user.rol.facultati.map((fac: any)=> fac.facultate._id); console.log(domenii, facultate); return user.rol.tip === "profesor" && domenii.find((dom: any)=> dom === facultate);});
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				const results = r.data.gasireTotiUseri.filter((user: UserType)=> {const domenii = user.rol.facultati.map((fac: any)=> fac.facultate._id); return user.rol.tip === "profesor" && domenii.find((dom: string)=> dom === facultate);});
 				setListaProfesoriFacultate(results);
 			});
 		}
@@ -96,7 +97,7 @@ export const FormularCreereCurs: React.FC = () => {
 							{facultati && facultati.length > 0 && facultati.map((facultate, index)=> <MenuItem key={`fac_${index}`} value={facultate._id}>{facultate.domeniu}</MenuItem>)}
 						</TextField>
 						<TextField select value={profSelectat} label="Profesor Coordonator" required sx={{width: "285px", mt: "36px"}} onChange={(e)=> {setProfSelectat(e.target.value);}}>
-							{listaProfesoriFacultate && listaProfesoriFacultate.length > 0 ? listaProfesoriFacultate.map((profesor: any, index: number)=> <MenuItem key={`fac_${index}`} value={profesor._id}>{profesor.nume}</MenuItem>) : <MenuItem value="">Selecteaza o Facultate</MenuItem>}
+							{listaProfesoriFacultate && listaProfesoriFacultate.length > 0 ? listaProfesoriFacultate.map((profesor: UserType, index: number)=> <MenuItem key={`fac_${index}`} value={profesor._id}>{profesor.nume}</MenuItem>) : <MenuItem value="">Selecteaza o Facultate</MenuItem>}
 						</TextField>
 						<Box sx={{width: "100%", display: "flex", justifyContent: "space-between", mt: "36px"}}>
 							<ToggleButtonGroup color="primary" exclusive value={cursSauLab} onChange={(e, value)=> {setCursSauLab(value);}}>
