@@ -45,7 +45,7 @@ export const DetaliiCurs: React.FC = () => {
 		<Box sx={{width: "90%", height: "auto", display: "flex"}}>
 			<Box sx={{width: "100%", height: "auto", backgroundColor: `${theme.palette.secondary.light}`, borderRadius: "20px", display: "flex", flexDirection: "column", alignitems: "center"}}>
 				<Box sx={{width: "95%", mt: "15px", ml: "15px"}}>
-					<Typography variant="h3" color="primary" onClick={()=> {navigate("../home");}}>&lt;&lt; Inapoi</Typography>
+					<Typography variant="h3" color="primary" onClick={()=> {navigate(`../${state?.lastLocation}`);}}>&lt;&lt; Inapoi</Typography>
 				</Box>
 				<Box sx={{width: "100%", height: "300px", textAlign: "center", mt: "100px", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center"}}>
 					<Box>
