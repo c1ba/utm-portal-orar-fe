@@ -8,6 +8,7 @@ import { GASIRE_USER_DUPA_ID } from "../utils/apollo/queries";
 export const LoginPage: React.FC = () => {
 	const navigate = useNavigate();
 	const [logId, setLogId] = useState<string>("");
+	const [cookieInit, setCookieInit] = useState<boolean>(false);
 	const [error, setError] = useState<string>("");
 	const [getUser] = useLazyQuery(GASIRE_USER_DUPA_ID, {});
 	const userData = useUserContext();
@@ -34,7 +35,7 @@ export const LoginPage: React.FC = () => {
 						loggedIn: newState.loggedIn
 					});
 					if (!document.cookie) {
-						document.cookie = `uid=${logId}; expires=${new Date().setHours(new Date().getHours() + 1)}`;
+						document.cookie = `uid=${logId}; expires=${new Date(new Date().setHours(new Date().getHours() + 1))}`;
 					}
 					navigate("/home");
 				}
@@ -51,9 +52,15 @@ export const LoginPage: React.FC = () => {
 		if (cookie) {
 			const id = cookie.split("=")[1];
 			setLogId(id);
-			handleSubmit();
+			setCookieInit(true);
 		}
 	},[]);
+
+	useEffect(()=> {
+		if (cookieInit && logId !== "") {
+			handleSubmit();
+		}
+	},[cookieInit]);
 
 
 	return (<Box sx={{width: "100vw", height: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
