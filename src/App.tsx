@@ -1,24 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 import { useUserContext } from "./context/UserContext";
 import { NavigationMenu } from "./components/NavigationMenu";
-import { Box } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 import { OrarSaptamana } from "./pages/OrarSaptamana";
 import { FormularCreereCurs } from "./components/FormularCreereCurs";
 import { theme } from "./utils/material-ui-theme";
 import { PanouAdmin } from "./pages/PanouAdmin";
 import { DetaliiCurs } from "./pages/DetaliiCurs";
+import { Menu } from "@mui/icons-material";
 
 const PageLayout = () => {
+	const isMobile = useMediaQuery("(max-width:600px)");
+	const [mobileNavBarOpen, setMobileNavBarOpen] = useState<boolean>(false);
 	return (
 		<Box sx={{display: "flex"}}>
-			<Box component="nav" sx={{width: "358px"}}>
-				<NavigationMenu />
-			</Box>
-			<Box component="main" sx={{flexGrow: 1, position: "relative", height: "100vh", backgroundColor: `${theme.palette.background.default}`}}>
+			{!isMobile ? <Box component="nav" sx={{width: isMobile ? "auto" : "358px"}}>
+				<NavigationMenu isMobile={false} />
+			</Box> : <NavigationMenu isMobile={true} isOpen={mobileNavBarOpen} setIsOpen={setMobileNavBarOpen} />}
+			<Box component="main" sx={{flexGrow: 1, position: isMobile ? "auto" : "relative", height: "100vh", backgroundColor: `${theme.palette.background.default}`}}>
+				{isMobile && <Menu sx={{ml: "15px", mt: "10px"}} onClick={()=> {console.log("Kwa"); setMobileNavBarOpen(true);}} />}
 				<Outlet />
 			</Box>
 		</Box>
