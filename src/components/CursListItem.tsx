@@ -1,6 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useUserContext } from "../context/UserContext";
 import { theme } from "../utils/material-ui-theme";
 import { UserType } from "../utils/types/backend-data";
 
@@ -19,11 +20,12 @@ export interface CursListItemProps {
 export const CursListItem: React.FC<CursListItemProps> = ({id, nume, anCurs, dataSustinereCurs, profesorCurs, tipPrezentareCurs, tipCurs, prezenteStudenti, absenteStudenti}) => {
 	const location = useLocation();
 	const navigate = useNavigate();
+	const userData = useUserContext();
 	return (
 		<Box sx={{display: "flex", width: "95%", height: "96px", alignItems: "center", justifyContent: "space-between", borderBottom: "solid #D9D9D9 1px"}}>
 			<Box sx={{display: "flex", flexDirection: "column"}}>
 				<Typography variant="h3">{`${dataSustinereCurs.numarOra}:00 - ${dataSustinereCurs.numarOra + 2}:00`}</Typography>
-				<Typography variant="h4">{nume}</Typography>
+				<Typography variant="h4">{`${nume}${userData?.state.rol !== "student" && `(An ${anCurs})`}`}</Typography>
 			</Box>
 			<Button variant="outlined" 
 				sx={{

@@ -23,6 +23,11 @@ const rute = [
 		isMobile: true
 	},
 	{
+		nume: "Sterge Curs",
+		ruta: "/stergere_curs",
+		accesPermis: ["profesor", "secretar", "admin"],
+		isMobile: true},
+	{
 		nume: "Panou Admin",
 		ruta: "/admin",
 		accesPermis: ["admin", "secretar"],

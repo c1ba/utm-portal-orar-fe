@@ -54,6 +54,7 @@ export const DetaliiCurs: React.FC = () => {
 						<Typography variant="h2">{state?.tipCurs}</Typography>
 					</Box>
 					<Typography variant="h2">Profesor: {state?.profesorCurs.nume}</Typography>
+					{userData?.rol !== "student" && <Typography variant="h2">Anul: {state?.anCurs}</Typography>}
 					<Typography variant="h2">Prezenta: {state?.tipPrezentareCurs.charAt(0).toUpperCase() + state?.tipPrezentareCurs.slice(1)}</Typography>
 					{dejaConfirmat && <Typography variant="h4" color="primary">Deja ai confirmat daca vei veni sau nu la curs.</Typography>}
 				</Box>

@@ -115,6 +115,7 @@ query GasireCursuri($gasireFacultateId: String!) {
       }
       anCurs
       profesorCurs {
+        _id
         nume
       }
       studentiPrezenti {

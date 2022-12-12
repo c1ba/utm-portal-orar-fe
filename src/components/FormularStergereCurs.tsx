@@ -3,6 +3,7 @@ import { ExpandMore } from "@mui/icons-material";
 import { Button, CircularProgress, MenuItem, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
+import { useUserContext } from "../context/UserContext";
 import { GASIRE_CURSURI_DUPA_FACULTATE_ID, GASIRE_TOTAL_FACULTATI, STERGERE_CURS_DUPA_ID } from "../utils/apollo/queries";
 import { CursType, SustinereCursType } from "../utils/types/backend-data";
 
@@ -36,6 +37,9 @@ const CursStergereListItem: React.FC<CursStergereListItemProps> = ({nume, datiSu
 };
 
 export const FormularStergereCurs: React.FC = () => {
+
+	const userData = useUserContext();
+
 	const {data, error, refetch} = useQuery(GASIRE_TOTAL_FACULTATI, {});
 	const [getCursuriFacultate] = useLazyQuery(GASIRE_CURSURI_DUPA_FACULTATE_ID, {});
 	const [facultati, setFacultati] = useState<{_id: string; domeniu: string;}[]>([]);
@@ -76,7 +80,7 @@ export const FormularStergereCurs: React.FC = () => {
 				{facultati && facultati.map((facultate, index)=> <MenuItem key={`fac_${index}`} value={facultate._id}>{facultate.domeniu}</MenuItem>)}
 			</TextField>
 			<Box sx={{mt: "25px"}}>
-				{cursuri && cursuri.length > 0 && cursuri.map((curs, index)=> {return <CursStergereListItem key={`curs_${index}`} anSustinere={curs.anCurs} nume={curs.nume} datiSustinereCurs={curs.datiSustinereCurs} handleDelete={()=> {handleStergereCurs(curs._id);}}/>;})}
+				{cursuri && cursuri.length > 0 && (userData?.state.rol === "profesor" ? cursuri.filter((c)=> c.profesorCurs._id === userData?.state._id).map((curs, index)=> {return <CursStergereListItem key={`curs_${index}`} anSustinere={curs.anCurs} nume={curs.nume} datiSustinereCurs={curs.datiSustinereCurs} handleDelete={()=> {handleStergereCurs(curs._id);}}/>;}) : cursuri.map((curs, index)=> {return <CursStergereListItem key={`curs_${index}`} anSustinere={curs.anCurs} nume={curs.nume} datiSustinereCurs={curs.datiSustinereCurs} handleDelete={()=> {handleStergereCurs(curs._id);}}/>;}))}
 			</Box>
 			{confirmationMessage !== "" && <Typography variant="body1">{confirmationMessage}</Typography>}
 		</Box>;
