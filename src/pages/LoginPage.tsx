@@ -21,12 +21,12 @@ export const LoginPage: React.FC = () => {
 			setError("Campuri Goale");
 		}
 		await logare({variables: {email: eMailInput, parola: parola}}).then((response)=> {
-			if(response.data.logare) {
+			if(response.data && response.data !== null) {
 				const decodedToken: {[key: string]: unknown} | null = decodeToken(response.data.logare);
 				sessionStorage.setItem("token", `${response.data.logare}`);
 				if (decodedToken) {
 					getUser({variables: {gasireUserId: decodedToken.id}}).then((response) => {
-						if (response.data.gasireUser && response.data.gasireUser !== null) {
+						if (response.data && response.data !== null) {
 							const newState = userData?.state;
 							if (newState) {
 								newState._id = response.data.gasireUser._id;
