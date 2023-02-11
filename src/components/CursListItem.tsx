@@ -33,7 +33,7 @@ export const CursListItem: React.FC<CursListItemProps> = ({id, nume, anCurs, dat
 						backgroundColor: `${theme.palette.primary.main}`,
 						color: `${theme.palette.secondary.light}`
 					}}}
-				onClick={()=> {console.log("Wa Hoo!"); navigate("../detalii_curs", {state: {_id: id, numeCurs: nume, anCurs: anCurs, dataSustinereCurs: dataSustinereCurs, profesorCurs: profesorCurs, tipPrezentareCurs: tipPrezentareCurs, tipCurs: tipCurs, studentiPrezenti: prezenteStudenti, studentiAbsenti: absenteStudenti, lastLocation: location.pathname}});}}
+				onClick={()=> {navigate("../detalii_curs", {state: {_id: id, numeCurs: nume, anCurs: anCurs, dataSustinereCurs: dataSustinereCurs, profesorCurs: profesorCurs, tipPrezentareCurs: tipPrezentareCurs, tipCurs: tipCurs, studentiPrezenti: prezenteStudenti, studentiAbsenti: absenteStudenti, lastLocation: location.pathname}});}}
 			>Mai multe detalii&gt;&gt;
 			</Button>
 		</Box>

@@ -14,8 +14,7 @@ export const HomePage: React.FC = () => {
 	const [getCursuri] = useLazyQuery(GASIRE_CURSURI_DUPA_FACULTATE_ID, {});
 	const [cursuri, setCursuri] = useState<CursType[]>([]);
     
-	useEffect(()=> { 
-		console.log(userData?.state);
+	useEffect(()=> {
 		if (userData?.state.facultati && userData?.state.facultati.length > 0) {
 			getCursuri({variables: {gasireFacultateId: userData.state.facultati[0].facultate._id}}).then((response)=> {
 				setCursuri(response.data.gasireFacultate.cursuri.filter((curs: CursType)=> userData.state.rol === "student" ? curs.anCurs === userData.state.an : curs));

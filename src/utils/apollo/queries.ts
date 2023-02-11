@@ -76,6 +76,11 @@ query GasireUser($gasireUserId: String!) {
   }
 }`;
 
+export const LOGARE = gql`
+query Query($email: String!, $parola: String!) {
+  logare(email: $email, parola: $parola)
+}`;
+
 export const EDITARE_PREZENTE_CURS = gql`
 mutation EditareCursPrezente($editareCursId: String!, $studentiPrezentiIds: [UserWhereInput!]) {
   editareCurs(id: $editareCursId, inputEditareCurs: {studentiPrezenti: $studentiPrezentiIds}) {

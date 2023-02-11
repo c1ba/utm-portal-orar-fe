@@ -9,7 +9,7 @@ export interface InitialStateType {
 	_id: string;
     loggedIn: boolean;
     nume: string;
-    mail: string;
+    eMail: string;
     numarTelefon: string;
     rol: string;
     facultati: RolFacultate[];
@@ -25,7 +25,7 @@ const initialState: InitialStateType = {
 	_id: "",
 	loggedIn: false,
 	nume: "",
-	mail: "",
+	eMail: "",
 	numarTelefon: "",
 	rol: "",
 	facultati: [],

@@ -13,8 +13,7 @@ export const OrarSaptamana: React.FC = () => {
 	const [cursuri, setCursuri] = useState<CursType[]>([]);
 	const [ziSelectata, setZiSelectata] = useState<number>(new Date().getDay());
     
-	useEffect(()=> { 
-		console.log(userData?.state);
+	useEffect(()=> {
 		if (userData?.state.facultati && userData?.state.facultati.length > 0) {
 			getCursuri({variables: {gasireFacultateId: userData.state.facultati[0].facultate._id}}).then((response)=> {
 				setCursuri(response.data.gasireFacultate.cursuri.filter((curs: CursType)=> userData.state.rol === "student" ? curs.anCurs === userData.state.an : curs));
