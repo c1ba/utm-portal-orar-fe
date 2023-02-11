@@ -50,7 +50,6 @@ export const FormularStergereCurs: React.FC = () => {
 
 	const handleStergereCurs = (id: string) => {
 		stergereCurs({variables: {stergereCursId: id}}).then((response)=> {
-			console.log(response);
 			if (response.data.stergereCurs) {
 				setCursuri(cursuri.filter((curs)=> curs._id !== response.data.stergereCurs._id));
 				refetch();
@@ -73,7 +72,6 @@ export const FormularStergereCurs: React.FC = () => {
 			<TextField select value={facultate} label="Facultatea de care apartine" required sx={{width: "285px", mt: "36px"}} onChange={(e)=> {
 				setFacultate(e.target.value);
 				getCursuriFacultate({variables: {gasireFacultateId: e.target.value}}).then((response)=> { 
-					console.log(response);
 					if (response.data.gasireFacultate.cursuri) setCursuri(response.data.gasireFacultate.cursuri);
 				});
 			}}>
