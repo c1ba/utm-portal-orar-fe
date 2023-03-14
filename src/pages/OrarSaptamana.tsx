@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { CursListItem } from "../components/CursListItem";
 import { useUserContext } from "../context/UserContext";
 import { GASIRE_CURSURI_DUPA_FACULTATE_ID } from "../utils/apollo/queries";
+import { returnTipCursType, returnTipPrezentareCursType } from "../utils/convertor-functions";
 import { theme } from "../utils/material-ui-theme";
 import { CursType } from "../utils/types/backend-data";
 
@@ -37,7 +38,7 @@ export const OrarSaptamana: React.FC = () => {
 						const foundTodaysCourse = curs.datiSustinereCurs.filter((data)=> data.numarZi === ziSelectata);
 						if (foundTodaysCourse && foundTodaysCourse.length > 0) {
 							for (let i = 0; i < foundTodaysCourse.length; i++) {
-								return <CursListItem key={`curs_${index}`} id={curs._id} nume={curs.nume} profesorCurs={curs.profesorCurs} anCurs={curs.anCurs} tipCurs={curs.tipCurs} tipPrezentareCurs={curs.tipPrezentareCurs} dataSustinereCurs={foundTodaysCourse[i]} prezenteStudenti={curs.studentiPrezenti} absenteStudenti={curs.studentiAbsenti}/>;
+								return <CursListItem key={`curs_${index}`} id={curs._id} nume={curs.nume} profesorCurs={curs.profesorCurs} anCurs={curs.anCurs} tipCurs={returnTipCursType(curs.tipCurs)} tipPrezentareCurs={returnTipPrezentareCursType(curs.tipPrezentareCurs)} dataSustinereCurs={foundTodaysCourse[i]} prezenteStudenti={curs.studentiPrezenti} absenteStudenti={curs.studentiAbsenti}/>;
 							}
 						}
 					}

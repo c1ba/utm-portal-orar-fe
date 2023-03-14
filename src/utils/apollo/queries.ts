@@ -56,7 +56,6 @@ query GasireTotalCursuri {
 export const GASIRE_USER_DUPA_ID = gql`
 query GasireUser($gasireUserId: String!) {
   gasireUser(id: $gasireUserId) {
-    _id
     eMail
     numarTelefon
     nume
@@ -84,9 +83,7 @@ query Query($email: String!, $parola: String!) {
 export const EDITARE_PREZENTE_CURS = gql`
 mutation EditareCursPrezente($editareCursId: String!, $studentiPrezentiIds: [UserWhereInput!]) {
   editareCurs(id: $editareCursId, inputEditareCurs: {studentiPrezenti: $studentiPrezentiIds}) {
-    _id
     studentiPrezenti {
-      _id
       nume
     }
   }
@@ -107,7 +104,6 @@ mutation Mutation($editareCursId: String!, $studentiAbsentiData: [StudentAbsentI
 export const GASIRE_CURSURI_DUPA_FACULTATE_ID = gql`
 query GasireCursuri($gasireFacultateId: String!) {
   gasireFacultate(id: $gasireFacultateId) {
-    _id
     domeniu
     cursuri {
       _id

@@ -1,3 +1,14 @@
+export enum TipCursEnum {
+    CURS,
+    LABORATOR
+}
+
+export enum TipPrezentareCursEnum {
+    FIZIC,
+    ONLINE,
+    HIBRID
+}
+
 export interface SustinereCursType {
     numarZi: number;
     numarOra: number;
@@ -7,8 +18,8 @@ export interface CursType {
     _id: string;
     nume: string;
     anCurs: number;
-    tipPrezentareCurs: string;
-    tipCurs: string;
+    tipPrezentareCurs: TipPrezentareCursEnum;
+    tipCurs: TipCursEnum;
     datiSustinereCurs: SustinereCursType[];
     profesorCurs: UserType;
     studentiPrezenti: UserType[];

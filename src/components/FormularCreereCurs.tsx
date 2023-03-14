@@ -4,7 +4,8 @@ import { Box, Button, CircularProgress, MenuItem, TextField, ToggleButton, Toggl
 import React, { useEffect, useState } from "react";
 import { useUserContext } from "../context/UserContext";
 import { CREERE_CURS, GASIRE_TOTAL_FACULTATI, GASIRE_TOTAL_USERI } from "../utils/apollo/queries";
-import {SustinereCursType, UserType} from "../utils/types/backend-data";
+import { returnTipCursType, returnTipPrezentareCursType } from "../utils/convertor-functions";
+import {SustinereCursType, TipCursEnum, TipPrezentareCursEnum, UserType} from "../utils/types/backend-data";
 
 interface ComponentaDateSustinereInputProps {
     ziOraCombo: SustinereCursType[];
@@ -108,17 +109,17 @@ export const FormularCreereCurs: React.FC = () => {
 						</TextField>
 						<Box sx={{width: "100%", display: "flex", justifyContent: isMobile ? "center" : "space-between", mt: "36px"}}>
 							<ToggleButtonGroup color="primary" exclusive value={cursSauLab} onChange={(e, value)=> {setCursSauLab(value);}}>
-								<ToggleButton value="Curs" sx={{width: "220px", height: "44px"}}>Curs</ToggleButton>
-								<ToggleButton value="Laborator" sx={{width: "220px", height: "44px"}}>Laborator</ToggleButton>
+								<ToggleButton value={`${returnTipCursType(TipCursEnum.CURS)}`} sx={{width: "220px", height: "44px"}}>Curs</ToggleButton>
+								<ToggleButton value={`${returnTipCursType(TipCursEnum.LABORATOR)}`} sx={{width: "220px", height: "44px"}}>Laborator</ToggleButton>
 							</ToggleButtonGroup>
 						</Box>
 					</Box>
 					<Box sx={{width: isMobile ? "100%" : "50%", height: "auto", display: "flex", flexDirection: "column", alignItems: isMobile ? "center" : "flex-start", mt: isMobile ? "15px" : "0"}}>
 						<Box sx={{width: "100%", display: "flex", justifyContent: isMobile ? "center" : "space-between"}}>
 							<ToggleButtonGroup sx={{width: isMobile ? "100%" : "auto"}} color="primary" exclusive value={fizicHibridSauOnline} onChange={(e, value)=> {setFizicHibridSauOnline(value);}}>
-								<ToggleButton value="fizic" sx={{width: "220px", height: "44px"}}>Fizic</ToggleButton>
-								<ToggleButton value="hibrid" sx={{width: "220px", height: "44px"}}>Hibrid</ToggleButton>
-								<ToggleButton value="online" sx={{width: "220px", height: "44px"}}>Online</ToggleButton>
+								<ToggleButton value={`${returnTipPrezentareCursType(TipPrezentareCursEnum.FIZIC)}`} sx={{width: "220px", height: "44px"}}>Fizic</ToggleButton>
+								<ToggleButton value={`${returnTipPrezentareCursType(TipPrezentareCursEnum.HIBRID)}`} sx={{width: "220px", height: "44px"}}>Hibrid</ToggleButton>
+								<ToggleButton value={`${returnTipPrezentareCursType(TipPrezentareCursEnum.ONLINE)}`} sx={{width: "220px", height: "44px"}}>Online</ToggleButton>
 							</ToggleButtonGroup>
 						</Box>
 						<Box sx={{width: "100%", display: "flex", justifyContent: isMobile ? "center" : "space-between", mt: "36px"}}>

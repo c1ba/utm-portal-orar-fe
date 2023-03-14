@@ -1,7 +1,9 @@
 import { Box, Button, Drawer, SwipeableDrawer, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { NavLink } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
+import { useSharedStatesHook } from "../hooks/useSharedStatesHook";
+import { SelectareFacultateModal } from "./SelectareFacultateModal";
 
 const rute = [
 	{
@@ -35,17 +37,15 @@ const rute = [
 	}
 ];
 
-interface NavigationMenuProps {
+interface NavMenuContentProps {
 	isMobile: boolean;
-	isOpen?: boolean;
-	setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const NavigationMenu: React.FC<NavigationMenuProps> = ({isMobile, isOpen, setIsOpen}) => {
+const NavMenuContent: React.FC<NavMenuContentProps> = ({isMobile}) => {
 	const userData = useUserContext();
 	const name = userData?.state.nume !== "" ? `${userData?.state.nume.split(" ")[1].split("-")[0]} ${userData?.state.nume.split(" ")[0]}` : "";
 	const [selectedIndex, setSelectedIndex] = useState<number>(0);
-	const butoaneRute = userData && rute.map((ruta, index)=> {return !isMobile ? ruta.accesPermis.includes(userData.state.rol) && (
+	const butoaneRute = userData && userData !== null && rute.map((ruta, index)=> {return !isMobile ? ruta.accesPermis.includes(userData.state.rol) && (
 		<Button
 			key={`nav_${index}`}
 			sx={{mt: "5px", mb: "5px"}}
@@ -67,24 +67,36 @@ export const NavigationMenu: React.FC<NavigationMenuProps> = ({isMobile, isOpen,
 		</Button>
 	);
 	});
+	const [selectareFacultateModalOpen, setSelectareFacultateModalOpen] = useState<boolean>(false);
+
+	const {getFacultateSelectata} = useSharedStatesHook();
+	const facultateSelectata = useMemo(() => {const fac = getFacultateSelectata(); return fac && fac != null ? fac : null;}, [getFacultateSelectata()]);
+
+	return <Box sx={{width: "358px", height: "100vh", display: "flex", flexDirection: "column", alignItems: "center"}}>
+		<img src="/images/logo-UTM.webp" width="128px" height="128px" style={{marginTop: "18px", marginBottom: "18px"}}/>
+		<Typography variant="h3" sx={{textAlign: "center", fontWeight: 400}}>Bun venit, <b>{name}</b>!</Typography>
+		<Box sx={{display: "flex", flexDirection: "column", mt: "65px"}}>
+			{butoaneRute}
+		</Box>
+		<Button onClick={() => {setSelectareFacultateModalOpen(true);}}><Typography>{`${facultateSelectata !== null && facultateSelectata.facultate.domeniu} ${userData?.state.rol === "student" ? `(An ${facultateSelectata !== null && facultateSelectata.an})` : ""} ▼`}</Typography></Button>
+		<SelectareFacultateModal isOpen={selectareFacultateModalOpen} setIsOpen={setSelectareFacultateModalOpen} />
+	</Box>;
+};
+
+interface NavigationMenuProps {
+	isMobile: boolean;
+	isOpen?: boolean;
+	setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const NavigationMenu: React.FC<NavigationMenuProps> = ({isMobile, isOpen, setIsOpen}) => {
+	
 	return (<>
 		{!isMobile ? <Drawer open={true} anchor="left" BackdropProps={{style:{backgroundColor: "transparent", width: "358px"}}} sx={{width: "358px"}} disableEnforceFocus>
-			<Box sx={{width: "358px", height: "100vh", display: "flex", flexDirection: "column", alignItems: "center"}}>
-				<img src="/images/logo-UTM.webp" width="128px" height="128px" style={{marginTop: "18px", marginBottom: "18px"}}/>
-				<Typography variant="h3" sx={{textAlign: "center", fontWeight: 400}}>Bun venit, <b>{name}</b>!</Typography>
-				<Box sx={{display: "flex", flexDirection: "column", mt: "65px"}}>
-					{butoaneRute}
-				</Box>
-			</Box>
+			<NavMenuContent isMobile={isMobile} />
 		</Drawer> : 
 			<SwipeableDrawer anchor="left" open={isOpen ? isOpen : false} onClose={()=> {setIsOpen && setIsOpen(false);}} onOpen={()=> {console.log("Kwa");}}>
-				<Box sx={{width: "358px", height: "100vh", display: "flex", flexDirection: "column", alignItems: "center"}}>
-					<img src="/images/logo-UTM.webp" width="128px" height="128px" style={{marginTop: "18px", marginBottom: "18px"}}/>
-					<Typography variant="h3" sx={{textAlign: "center", fontWeight: 400}}>Bun venit, <b>{name}</b>!</Typography>
-					<Box sx={{display: "flex", flexDirection: "column", mt: "65px"}}>
-						{butoaneRute}
-					</Box>
-				</Box>
+				<NavMenuContent isMobile={isMobile} />
 			</SwipeableDrawer>}</>
 	);
 };

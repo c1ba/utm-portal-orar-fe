@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 import { HomePage } from "./pages/HomePage";
@@ -13,8 +13,20 @@ import { DetaliiCurs } from "./pages/DetaliiCurs";
 import { Menu } from "@mui/icons-material";
 import { CreereCurs } from "./pages/CreereCurs";
 import { StergereCurs } from "./pages/StergereCurs";
+import { SharedStatesprovider } from "./context/SharedStatesContext";
+import { useSharedStatesHook } from "./hooks/useSharedStatesHook";
 
 const PageLayout = () => {
+
+	const userData = useUserContext();
+	const {setFacultateSelectata} = useSharedStatesHook();
+
+	useEffect(() => {
+		if (userData?.state.facultati && userData?.state.facultati.length > 0) {
+			setFacultateSelectata(userData.state.facultati[0]);
+		}
+	}, []);
+
 	const isMobile = useMediaQuery("(max-width:600px)");
 	const [mobileNavBarOpen, setMobileNavBarOpen] = useState<boolean>(false);
 	return (
@@ -34,17 +46,19 @@ function App() {
 	const userData = useUserContext();
 
 	return (
-		<Routes>
-			<Route element={<LoginPage />} path="/" />
-			<Route element={<PageLayout/>}>
-				<Route element={userData?.state.loggedIn ? <HomePage /> : <Navigate replace={true} to="/"/>} path="home"/>
-				<Route element={userData?.state.loggedIn ? <OrarSaptamana /> : <Navigate replace={true} to="/"/>} path="orar_saptamana"/>
-				<Route element={userData?.state.loggedIn && userData?.state.rol !== "student" ? <CreereCurs /> : <Navigate replace={true} to="/"/>} path="creere_curs"/>
-				<Route element={userData?.state.loggedIn && (userData?.state.rol === "secretar" || userData?.state.rol === "admin") ? <PanouAdmin /> : <Navigate replace={true} to="/"/>} path="admin"/>
-				<Route element={userData?.state.loggedIn ? <DetaliiCurs /> : <Navigate replace={true} to="/"/>} path="detalii_curs"/>
-				<Route element={userData?.state.loggedIn && userData?.state.rol !== "student" ? <StergereCurs /> : <Navigate replace={true} to="/"/>} path="stergere_curs"/>
-			</Route>
-		</Routes>
+		<SharedStatesprovider>
+			<Routes>
+				<Route element={<LoginPage />} path="/" />
+				<Route element={<PageLayout/>}>
+					<Route element={userData?.state.loggedIn ? <HomePage /> : <Navigate replace={true} to="/"/>} path="home"/>
+					<Route element={userData?.state.loggedIn ? <OrarSaptamana /> : <Navigate replace={true} to="/"/>} path="orar_saptamana"/>
+					<Route element={userData?.state.loggedIn && userData?.state.rol !== "student" ? <CreereCurs /> : <Navigate replace={true} to="/"/>} path="creere_curs"/>
+					<Route element={userData?.state.loggedIn && (userData?.state.rol === "secretar" || userData?.state.rol === "admin") ? <PanouAdmin /> : <Navigate replace={true} to="/"/>} path="admin"/>
+					<Route element={userData?.state.loggedIn ? <DetaliiCurs /> : <Navigate replace={true} to="/"/>} path="detalii_curs"/>
+					<Route element={userData?.state.loggedIn && userData?.state.rol !== "student" ? <StergereCurs /> : <Navigate replace={true} to="/"/>} path="stergere_curs"/>
+				</Route>
+			</Routes>
+		</SharedStatesprovider>
 	);
 }
 

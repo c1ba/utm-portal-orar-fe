@@ -29,7 +29,7 @@ export const LoginPage: React.FC = () => {
 						if (response.data && response.data !== null) {
 							const newState = userData?.state;
 							if (newState) {
-								newState._id = response.data.gasireUser._id;
+								newState._id = `${decodedToken.id}`;
 								newState.nume = response.data.gasireUser.nume;
 								newState.eMail = response.data.gasireUser.eMail;
 								newState.numarTelefon = response.data.gasireUser.numartelefon;
