@@ -42,8 +42,8 @@ export const FormularCreereCurs: React.FC = () => {
 	const [anPredare, setAnPredare] = useState<number>(0);
 	const [facultate, setFacultate] = useState<string>("");
 	const [facultati, setFacultati] = useState<{_id: string; domeniu: string;}[]>([{_id: "1", domeniu: "test"}]);
-	const [cursSauLab, setCursSauLab] = useState<string>("");
-	const [fizicHibridSauOnline, setFizicHibridSauOnline] = useState<string>("");
+	const [cursSauLab, setCursSauLab] = useState<string>(returnTipCursType(TipCursEnum.CURS));
+	const [fizicHibridSauOnline, setFizicHibridSauOnline] = useState<string>(returnTipPrezentareCursType(TipPrezentareCursEnum.FIZIC));
 	const [dateSustinereCurs, setDateSustinereCurs] = useState<SustinereCursType[]>([{numarZi: 1, numarOra: 12}]);
 	const {data, error, refetch} = useQuery(GASIRE_TOTAL_FACULTATI, {});
 	const [getUseri] = useLazyQuery(GASIRE_TOTAL_USERI, {});
@@ -51,6 +51,7 @@ export const FormularCreereCurs: React.FC = () => {
 	const [confirmationMessage, setConfirmationMessage] = useState<string>("");
 	const [listaProfesoriFacultate, setListaProfesoriFacultate] = useState([]);
 	const [profSelectat, setProfSelectat] = useState<string>("");
+	const conditieBlocareButon = !(facultate !== "" && cursSauLab !== "" && fizicHibridSauOnline !== "" && profSelectat !== "" && anPredare !== 0);
 
 	const handleSubmit = () => {
 		creeazaCurs(
@@ -130,7 +131,7 @@ export const FormularCreereCurs: React.FC = () => {
 						</Box>
 					</Box>
 				</Box>
-				<Button variant="contained" onClick={()=> {handleSubmit();}} sx={{mb: "75px"}}>Confirma</Button>
+				<Button disabled={conditieBlocareButon} variant="contained" onClick={()=> {handleSubmit();}} sx={{mb: "75px"}}>Confirma</Button>
 				{confirmationMessage !== "" && <Typography variant="body1">{confirmationMessage}</Typography>}
 			</Box>);
 	}

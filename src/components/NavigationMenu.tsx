@@ -80,6 +80,7 @@ const NavMenuContent: React.FC<NavMenuContentProps> = ({isMobile}) => {
 		</Box>
 		<Button onClick={() => {setSelectareFacultateModalOpen(true);}}><Typography>{`${facultateSelectata !== null && facultateSelectata.facultate.domeniu} ${userData?.state.rol === "student" ? `(An ${facultateSelectata !== null && facultateSelectata.an})` : ""} ▼`}</Typography></Button>
 		<SelectareFacultateModal isOpen={selectareFacultateModalOpen} setIsOpen={setSelectareFacultateModalOpen} />
+		<Button onClick={() => {localStorage.removeItem("token");}} component={NavLink} to="" variant="contained">Delogare</Button>
 	</Box>;
 };
 

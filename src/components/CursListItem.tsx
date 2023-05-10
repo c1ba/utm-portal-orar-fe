@@ -25,7 +25,7 @@ export const CursListItem: React.FC<CursListItemProps> = ({id, nume, anCurs, dat
 		<Box sx={{display: "flex", width: "95%", height: "96px", alignItems: "center", justifyContent: "space-between", borderBottom: "solid #D9D9D9 1px"}}>
 			<Box sx={{display: "flex", flexDirection: "column"}}>
 				<Typography variant="h3">{`${dataSustinereCurs.numarOra}:00 - ${dataSustinereCurs.numarOra + 2}:00`}</Typography>
-				<Typography variant="h4">{`${nume}${userData?.state.rol !== "student" && `(An ${anCurs})`}`}</Typography>
+				<Typography variant="h4">{`${nume}${userData?.state.rol !== "student" ? `(An ${anCurs})` : ""}`}</Typography>
 			</Box>
 			<Button variant="outlined" 
 				sx={{

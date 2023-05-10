@@ -16,8 +16,7 @@ export const DetaliiCurs: React.FC = () => {
 	const [absentaError, setAbsentaError] = React.useState<string>("");
 	const [adaugarePrezenta] = useMutation(EDITARE_PREZENTE_CURS, {});
 	const [adaugareAbsenta] = useMutation(EDITARE_ABSENTE_CURSURI, {});
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const dejaConfirmat = state?.studentiPrezenti.find((s: any)=> s._id === userData?._id) ? true : state?.studentiAbsenti.find((s: any) => s.student._id === userData?._id) ? true : false;
+	const [dejaConfirmat, setDejaConfirmat] = React.useState<boolean>(false);
 	const [mesajRequest, setMesajRequest] = React.useState<string>("");
 	const [listaStudenti, setListaStudenti] = React.useState<"lista_prezenti" | "lista_absenti">("lista_prezenti");
 	
@@ -25,20 +24,23 @@ export const DetaliiCurs: React.FC = () => {
 		setState(location.state);
 	},[]);
 
-	const absentaSubmit = () => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const listaStudentiUpdatata = [...state.studentiAbsenti.map((s: any) => {return {student: {_id: s.student._id, motiv: s.motiv}};}), {student: {_id: userData?._id}, motiv: motivAbsenta}];
-		adaugareAbsenta({variables: {editareCursId: state?._id, studentiAbsentiData: listaStudentiUpdatata}}).then((r)=> {
-			if (r.data.editareCurs) setMesajRequest("Ai confirmat absenta!");
-		});
+	React.useEffect(() => {
+		const existaStudentulInVreoLista = state?.studentiPrezenti.find((s: {_id: string, nume: string})=> s._id === userData?._id) || state?.studentiAbsenti.find((s: {student: {_id: string, nume: string}, motiv: string}) => s.student._id === userData?._id);
+		setDejaConfirmat(existaStudentulInVreoLista ? true : false);
+	}, [state]);
+
+	const absentaSubmit = async () => {
+		const rezultat = await adaugareAbsenta({variables: {idCurs: state?._id, idUser: userData?._id, motivAbsenta: motivAbsenta}});
+		if (!rezultat || rezultat.data === null) return;
+		setMesajRequest("Ai confirmat absenta!");
+		setDejaConfirmat(true);
 	};
 
-	const prezentaSubmit = () => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const listaStudentiUpdatata = [...state.studentiPrezenti.map((s: any)=> {return {_id: s._id};}), {_id: userData?._id}];
-		adaugarePrezenta({variables: { editareCursId: state?._id, studentiPrezentiIds: listaStudentiUpdatata}}).then((r) => {
-			if (r.data.editareCurs) setMesajRequest("Ai confirmat prezenta!");
-		});
+	const prezentaSubmit = async () => {
+		const rezultat = await adaugarePrezenta({variables: {idCurs: state?._id, idUser: userData?._id}});
+		if (!rezultat || rezultat.data === null) return;
+		setMesajRequest("Ai confirmat prezenta!");
+		setDejaConfirmat(true);
 	};
 
 	return <Box sx={{width: "100%", height: "100vh", backgroundColor: `${theme.palette.background.default}`, display: "flex", justifyContent: "center", alignItems: "center"}}>
@@ -60,11 +62,11 @@ export const DetaliiCurs: React.FC = () => {
 				</Box>
 				{ userData && (userData?.rol === "student" || userData?.rol === "admin") && <>
 					<Box sx={{width: "100%", display: "flex", justifyContent: "space-around", mt: "50px", mb: "25px"}}>
-						<Button variant="contained" onClick={()=> {prezentaSubmit();}} disabled={dejaConfirmat}>Confirma Prezenta</Button>
-						<Button onClick={()=> {absentaSubmit();}} disabled={(absentaError !== "") || dejaConfirmat}>Confirma Absenta</Button>
+						<Button variant="contained" onClick={async ()=> {await prezentaSubmit();}} disabled={dejaConfirmat}>Confirma Prezenta</Button>
+						<Button onClick={async ()=> {await absentaSubmit();}} disabled={(absentaError !== "") || dejaConfirmat}>Confirma Absenta</Button>
 					</Box>
-					<Box sx={{width: "100%", display: "flex", justifyContent: "center", mt: "50px"}}>
-						<TextField helperText={absentaError !== "" && absentaError} error={absentaError !== ""} multiline sx={{width: "70%"}} placeholder="Am racit, am treaba la lucru, m-au chemat extraterestrii in misiunea mult asteptata de a explora unviersul, bla bla bla" label="Motiv Absenta" onChange={(e)=> {setMotivAbsenta(e.target.value); e.target.value === "" ? setAbsentaError("Nu poti sa chiulesti fara motiv..") : absentaError !== "" && setAbsentaError("");}} />
+					<Box sx={{width: "100%", display: "flex", justifyContent: "center", mt: "50px", pb: "5%"}}>
+						<TextField helperText={absentaError !== "" && absentaError} disabled={dejaConfirmat} error={absentaError !== ""} multiline sx={{width: "70%"}} placeholder="Am racit, am treaba la lucru, m-au chemat extraterestrii in misiunea mult asteptata de a explora unviersul, bla bla bla" label="Motiv Absenta" onChange={(e)=> {setMotivAbsenta(e.target.value); e.target.value === "" ? setAbsentaError("Nu poti sa chiulesti fara motiv..") : absentaError !== "" && setAbsentaError("");}} />
 					</Box>
 				</>}
 				{userData && (userData?.rol === "profesor" || userData?.rol === "admin" || userData?.rol === "secretar") && <>

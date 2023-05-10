@@ -81,22 +81,21 @@ query Query($email: String!, $parola: String!) {
 }`;
 
 export const EDITARE_PREZENTE_CURS = gql`
-mutation EditareCursPrezente($editareCursId: String!, $studentiPrezentiIds: [UserWhereInput!]) {
-  editareCurs(id: $editareCursId, inputEditareCurs: {studentiPrezenti: $studentiPrezentiIds}) {
+mutation ConfirmarePrezentaLaCurs($idUser: ID!, $idCurs: ID!) {
+  confirmarePrezentaLaCurs(args: {idCurs: $idCurs, idUser: $idUser}) {
     studentiPrezenti {
+      _id
       nume
     }
   }
 }`;
 
 export const EDITARE_ABSENTE_CURSURI = gql`
-mutation Mutation($editareCursId: String!, $studentiAbsentiData: [StudentAbsentInput!]) {
-  editareCurs(id: $editareCursId, inputEditareCurs: {studentiAbsenti: $studentiAbsentiData}) {
-    studentiAbsenti {
-      student {
-        nume
-      }
-      motiv
+mutation ConfirmareAbsentaLaCurs($idUser: ID!, $idCurs: ID!, $motivAbsenta: String!) {
+  confirmareAbsentaLaCurs(args: {idCurs: $idCurs, idUser: $idUser, motivAbsenta: $motivAbsenta}) {
+    studentiPrezenti {
+      _id
+      nume
     }
   }
 }`;
@@ -129,6 +128,28 @@ query GasireCursuri($gasireFacultateId: String!) {
         nume
         }
         motiv
+      }
+    }
+  }
+}`;
+
+export const GASIRE_CURSURI_FORMULAR_STERGERE = gql`
+query GasireCursuri($gasireFacultateId: String!) {
+  gasireFacultate(id: $gasireFacultateId) {
+    domeniu
+    cursuri {
+      _id
+      nume
+      tipCurs
+      tipPrezentareCurs
+      datiSustinereCurs {
+        numarOra
+        numarZi
+      }
+      anCurs
+      profesorCurs {
+        _id
+        nume
       }
     }
   }

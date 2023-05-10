@@ -16,7 +16,7 @@ import { StergereCurs } from "./pages/StergereCurs";
 import { SharedStatesprovider } from "./context/SharedStatesContext";
 import { useSharedStatesHook } from "./hooks/useSharedStatesHook";
 
-const PageLayout = () => {
+const PageLayout: React.FC = () => {
 
 	const userData = useUserContext();
 	const {setFacultateSelectata} = useSharedStatesHook();
@@ -34,7 +34,11 @@ const PageLayout = () => {
 			{!isMobile ? <Box component="nav" sx={{width: isMobile ? "auto" : "358px"}}>
 				<NavigationMenu isMobile={false} />
 			</Box> : <NavigationMenu isMobile={true} isOpen={mobileNavBarOpen} setIsOpen={setMobileNavBarOpen} />}
-			<Box component="main" sx={{flexGrow: 1, position: isMobile ? "auto" : "relative", height: "100vh", backgroundColor: `${theme.palette.background.default}`}}>
+			<Box component="main" sx={{
+				flexGrow: 1, 
+				position: isMobile ? "auto" : "relative", 
+				height: "100vh",
+				backgroundColor: `${theme.palette.background.default}`}}>
 				{isMobile && <Menu sx={{ml: "15px", mt: "10px"}} onClick={()=> {setMobileNavBarOpen(true);}} />}
 				<Outlet />
 			</Box>

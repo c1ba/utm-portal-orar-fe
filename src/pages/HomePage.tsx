@@ -6,14 +6,14 @@ import { CursListItem } from "../components/CursListItem";
 import { useUserContext } from "../context/UserContext";
 import { useSharedStatesHook } from "../hooks/useSharedStatesHook";
 import { GASIRE_CURSURI_DUPA_FACULTATE_ID } from "../utils/apollo/queries";
-import { DataInRomana, returnTipCursType, returnTipPrezentareCursType } from "../utils/convertor-functions";
+import { DataInRomana } from "../utils/convertor-functions";
 import { theme } from "../utils/material-ui-theme";
-import { CursType } from "../utils/types/backend-data";
+import { CursBEType, CursType } from "../utils/types/backend-data";
 export const HomePage: React.FC = () => {
 
 	const userData = useUserContext();
 	const [getCursuri] = useLazyQuery(GASIRE_CURSURI_DUPA_FACULTATE_ID, {});
-	const [cursuri, setCursuri] = useState<CursType[]>([]);
+	const [cursuri, setCursuri] = useState<CursBEType[]>([]);
 	const {getFacultateSelectata} = useSharedStatesHook();
     
 	useEffect(()=> {
@@ -33,7 +33,7 @@ export const HomePage: React.FC = () => {
 					{cursuri.map((curs, index)=> { 
 						const today = new Date(), foundTodaysCourse = curs.datiSustinereCurs.find((data)=> data.numarZi === today.getDay());
 						if (foundTodaysCourse) {
-							return <CursListItem key={`curs_${index}`} id={curs._id} nume={curs.nume} profesorCurs={curs.profesorCurs} anCurs={curs.anCurs} tipCurs={returnTipCursType(curs.tipCurs)} tipPrezentareCurs={returnTipPrezentareCursType(curs.tipPrezentareCurs)} dataSustinereCurs={foundTodaysCourse} prezenteStudenti={curs.studentiPrezenti} absenteStudenti={curs.studentiAbsenti}/>;
+							return <CursListItem key={`curs_${index}`} id={curs._id} nume={curs.nume} profesorCurs={curs.profesorCurs} anCurs={curs.anCurs} tipCurs={curs.tipCurs} tipPrezentareCurs={curs.tipPrezentareCurs} dataSustinereCurs={foundTodaysCourse} prezenteStudenti={curs.studentiPrezenti} absenteStudenti={curs.studentiAbsenti}/>;
 						}
 					}
 					)}

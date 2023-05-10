@@ -5,14 +5,13 @@ import { CursListItem } from "../components/CursListItem";
 import { useUserContext } from "../context/UserContext";
 import { useSharedStatesHook } from "../hooks/useSharedStatesHook";
 import { GASIRE_CURSURI_DUPA_FACULTATE_ID } from "../utils/apollo/queries";
-import { returnTipCursType, returnTipPrezentareCursType } from "../utils/convertor-functions";
 import { theme } from "../utils/material-ui-theme";
-import { CursType } from "../utils/types/backend-data";
+import { CursBEType, CursType } from "../utils/types/backend-data";
 
 export const OrarSaptamana: React.FC = () => {
 	const userData = useUserContext();
 	const [getCursuri] = useLazyQuery(GASIRE_CURSURI_DUPA_FACULTATE_ID, {});
-	const [cursuri, setCursuri] = useState<CursType[]>([]);
+	const [cursuri, setCursuri] = useState<CursBEType[]>([]);
 	const [ziSelectata, setZiSelectata] = useState<number>(new Date().getDay());
 	const {getFacultateSelectata} = useSharedStatesHook();
     
@@ -20,7 +19,7 @@ export const OrarSaptamana: React.FC = () => {
 		const facultateSelectata = getFacultateSelectata();
 		if (userData?.state.facultati && userData?.state.facultati.length > 0 && facultateSelectata && facultateSelectata !== null) {
 			getCursuri({variables: {gasireFacultateId: facultateSelectata.facultate._id}}).then((response)=> {
-				setCursuri(response.data.gasireFacultate.cursuri.filter((curs: CursType)=> userData.state.rol === "student" ? curs.anCurs === userData.state.an : curs));
+				setCursuri(response.data.gasireFacultate.cursuri.filter((curs: CursType)=> userData.state.rol === "student" ? curs.anCurs === facultateSelectata.an : curs));
 			});
 		}
 	},[getFacultateSelectata()]);
@@ -41,7 +40,7 @@ export const OrarSaptamana: React.FC = () => {
 						const foundTodaysCourse = curs.datiSustinereCurs.filter((data)=> data.numarZi === ziSelectata);
 						if (foundTodaysCourse && foundTodaysCourse.length > 0) {
 							for (let i = 0; i < foundTodaysCourse.length; i++) {
-								return <CursListItem key={`curs_${index}`} id={curs._id} nume={curs.nume} profesorCurs={curs.profesorCurs} anCurs={curs.anCurs} tipCurs={returnTipCursType(curs.tipCurs)} tipPrezentareCurs={returnTipPrezentareCursType(curs.tipPrezentareCurs)} dataSustinereCurs={foundTodaysCourse[i]} prezenteStudenti={curs.studentiPrezenti} absenteStudenti={curs.studentiAbsenti}/>;
+								return <CursListItem key={`curs_${index}`} id={curs._id} nume={curs.nume} profesorCurs={curs.profesorCurs} anCurs={curs.anCurs} tipCurs={curs.tipCurs} tipPrezentareCurs={curs.tipPrezentareCurs} dataSustinereCurs={foundTodaysCourse[i]} prezenteStudenti={curs.studentiPrezenti} absenteStudenti={curs.studentiAbsenti}/>;
 							}
 						}
 					}

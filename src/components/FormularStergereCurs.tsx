@@ -4,7 +4,7 @@ import { Button, CircularProgress, MenuItem, TextField, Typography } from "@mui/
 import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useUserContext } from "../context/UserContext";
-import { GASIRE_CURSURI_DUPA_FACULTATE_ID, GASIRE_TOTAL_FACULTATI, STERGERE_CURS_DUPA_ID } from "../utils/apollo/queries";
+import { GASIRE_CURSURI_DUPA_FACULTATE_ID, GASIRE_CURSURI_FORMULAR_STERGERE, GASIRE_TOTAL_FACULTATI, STERGERE_CURS_DUPA_ID } from "../utils/apollo/queries";
 import { CursType, SustinereCursType } from "../utils/types/backend-data";
 
 interface CursStergereListItemProps {
@@ -41,7 +41,7 @@ export const FormularStergereCurs: React.FC = () => {
 	const userData = useUserContext();
 
 	const {data, error, refetch} = useQuery(GASIRE_TOTAL_FACULTATI, {});
-	const [getCursuriFacultate] = useLazyQuery(GASIRE_CURSURI_DUPA_FACULTATE_ID, {});
+	const [getCursuriFacultate] = useLazyQuery(GASIRE_CURSURI_FORMULAR_STERGERE, {});
 	const [facultati, setFacultati] = useState<{_id: string; domeniu: string;}[]>([]);
 	const [facultate, setFacultate] = useState<string>("");
 	const [cursuri, setCursuri] = useState<CursType[]>([]);

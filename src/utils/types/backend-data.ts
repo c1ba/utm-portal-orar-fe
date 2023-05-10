@@ -26,6 +26,18 @@ export interface CursType {
     studentiAbsenti: UserType[];
 }
 
+export interface CursBEType {
+    _id: string;
+    nume: string;
+    anCurs: number;
+    tipPrezentareCurs: string;
+    tipCurs: string;
+    datiSustinereCurs: SustinereCursType[];
+    profesorCurs: UserType;
+    studentiPrezenti: UserType[];
+    studentiAbsenti: UserType[];
+}
+
 export interface RolFacultate {
     an?: number;
     facultate: FacultateType;

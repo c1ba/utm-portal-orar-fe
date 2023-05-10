@@ -16,6 +16,15 @@ export const returnTipCursType = (BEResponse: TipCursEnum) => {
 	}
 };
 
+export const returnEnumTipCursType = (BEResponse: string) => {
+	switch (BEResponse) {
+	case "Curs":
+		return TipCursEnum.CURS;
+	case "Laborator":
+		return TipCursEnum.LABORATOR;
+	}
+};
+
 export const returnTipPrezentareCursType = (BEResponse: TipPrezentareCursEnum) => {
 	switch (BEResponse) {
 	case TipPrezentareCursEnum.FIZIC:
@@ -26,5 +35,16 @@ export const returnTipPrezentareCursType = (BEResponse: TipPrezentareCursEnum) =
 		return "online";
 	default:
 		return "";
+	}
+};
+
+export const returnEnumTipPrezentareCursType = (BEResponse: string) => {
+	switch (BEResponse) {
+	case "fizic":
+		return TipPrezentareCursEnum.FIZIC;
+	case "hibrid":
+		return TipPrezentareCursEnum.HIBRID;
+	case "online":
+		return TipPrezentareCursEnum.ONLINE;
 	}
 };
