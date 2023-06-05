@@ -17,7 +17,10 @@ export const useSharedStatesHook = () => {
 
 		if (newState) {
 			newState.facultateSelectata = value;
-			sharedStates.setState({...sharedStates.state, facultateSelectata: newState.facultateSelectata});
+			sharedStates.setState({
+				...sharedStates.state, 
+				facultateSelectata: newState.facultateSelectata
+			});
 		}
 	};
 
