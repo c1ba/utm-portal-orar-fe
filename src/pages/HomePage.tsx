@@ -12,7 +12,7 @@ import { CursBEType, CursType } from "../utils/types/backend-data";
 export const HomePage: React.FC = () => {
 
 	const userData = useUserContext();
-	const [getCursuri] = useLazyQuery(GASIRE_CURSURI_DUPA_FACULTATE_ID, {});
+	const [getCursuri] = useLazyQuery(GASIRE_CURSURI_DUPA_FACULTATE_ID, {fetchPolicy: "no-cache"});
 	const [cursuri, setCursuri] = useState<CursBEType[]>([]);
 	const {getFacultateSelectata} = useSharedStatesHook();
     

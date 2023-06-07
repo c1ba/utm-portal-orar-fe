@@ -63,13 +63,13 @@ export const DetaliiCurs: React.FC = () => {
 				{ userData && (userData?.rol === "student" || userData?.rol === "admin") && <>
 					<Box sx={{width: "100%", display: "flex", justifyContent: "space-around", mt: "50px", mb: "25px"}}>
 						<Button variant="contained" onClick={async ()=> {await prezentaSubmit();}} disabled={dejaConfirmat}>Confirma Prezenta</Button>
-						<Button onClick={async ()=> {await absentaSubmit();}} disabled={(absentaError !== "") || dejaConfirmat}>Confirma Absenta</Button>
+						<Button onClick={async ()=> {await absentaSubmit();}} disabled={(absentaError === "") || dejaConfirmat}>Confirma Absenta</Button>
 					</Box>
 					<Box sx={{width: "100%", display: "flex", justifyContent: "center", mt: "50px", pb: "5%"}}>
 						<TextField helperText={absentaError !== "" && absentaError} disabled={dejaConfirmat} error={absentaError !== ""} multiline sx={{width: "70%"}} placeholder="Am racit, am treaba la lucru, m-au chemat extraterestrii in misiunea mult asteptata de a explora unviersul, bla bla bla" label="Motiv Absenta" onChange={(e)=> {setMotivAbsenta(e.target.value); e.target.value === "" ? setAbsentaError("Nu poti sa chiulesti fara motiv..") : absentaError !== "" && setAbsentaError("");}} />
 					</Box>
 				</>}
-				{userData && (userData?.rol === "profesor" || userData?.rol === "admin" || userData?.rol === "secretar") && <>
+				{userData && (userData?.rol !== "student") && <>
 					<Box sx={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", mt: "50px"}}>
 						<ToggleButtonGroup color="primary" exclusive value={listaStudenti} onChange={(e, val) =>{setListaStudenti(val);}}>
 							<ToggleButton value="lista_prezenti">Prezente</ToggleButton>

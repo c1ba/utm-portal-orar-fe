@@ -46,7 +46,7 @@ export const FormularCreereCurs: React.FC = () => {
 	const [fizicHibridSauOnline, setFizicHibridSauOnline] = useState<string>(returnTipPrezentareCursType(TipPrezentareCursEnum.FIZIC));
 	const [dateSustinereCurs, setDateSustinereCurs] = useState<SustinereCursType[]>([{numarZi: 1, numarOra: 12}]);
 	const {data, error, refetch} = useQuery(GASIRE_TOTAL_FACULTATI, {});
-	const [getUseri] = useLazyQuery(GASIRE_TOTAL_USERI, {});
+	const [getUseri] = useLazyQuery(GASIRE_TOTAL_USERI, {fetchPolicy: "no-cache"});
 	const [creeazaCurs] = useMutation(CREERE_CURS, {});
 	const [confirmationMessage, setConfirmationMessage] = useState<string>("");
 	const [listaProfesoriFacultate, setListaProfesoriFacultate] = useState([]);
