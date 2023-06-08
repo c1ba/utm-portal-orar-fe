@@ -60,8 +60,8 @@ export const LoginPage: React.FC = () => {
 			else {
 				setError("Autentificare Nereusita");
 			}
+			setLoading(false);
 		});
-		loading && setLoading(false);
 	};
 
 
