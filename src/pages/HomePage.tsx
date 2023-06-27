@@ -20,7 +20,7 @@ export const HomePage: React.FC = () => {
 		const facultateSelectata = getFacultateSelectata();
 		if (userData?.state.facultati && userData?.state.facultati.length > 0 && facultateSelectata) {
 			getCursuri({variables: {gasireFacultateId: facultateSelectata.facultate._id}}).then((response)=> {
-				setCursuri(response.data.gasireFacultate.cursuri.filter((curs: CursType)=> userData.state.rol === "student" ? curs.anCurs === userData.state.an : curs));
+				setCursuri(response.data.gasireFacultate.cursuri.filter((curs: CursType)=> userData.state.rol === "student" ? curs.anCurs === facultateSelectata.an : curs));
 			});
 		}
 	},[getFacultateSelectata()]);
